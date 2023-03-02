@@ -1,0 +1,248 @@
+{
+	"info": {
+		"_postman_id": "2cc2a052-d53d-4157-a4f3-302d09500238",
+		"name": "ContactBook",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8124914"
+	},
+	"item": [
+		{
+			"name": "Contacts",
+			"item": [
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "List all contacts",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Chech if the status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://contactbook.elenaallienn.repl.co/api/contacts",
+									"protocol": "https",
+									"host": [
+										"contactbook",
+										"elenaallienn",
+										"repl",
+										"co"
+									],
+									"path": [
+										"api",
+										"contacts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List single contact",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Person is Michael and check if the last name is Jackson \", () => {\r",
+											"  const responseJson = pm.response.json();\r",
+											"  pm.expect(responseJson.firstName).to.eql(\"Michael\");\r",
+											"  pm.expect(responseJson.lastName).to.eql(\"Jackson\");\r",
+											"  });"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://contactbook.elenaallienn.repl.co/api/contacts/2",
+									"protocol": "https",
+									"host": [
+										"contactbook",
+										"elenaallienn",
+										"repl",
+										"co"
+									],
+									"path": [
+										"api",
+										"contacts",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "Create contact",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check if the status code is 201 or 202\", function () {\r",
+											"    pm.expect(pm.response.code, \"Status code property\").to.be.oneOf([201, 202]);\r",
+											"\r",
+											"    const respBody = pm.response.json();\r",
+											"    pm.environment.set(\"contactId\", respBody.contact.id);\r",
+											"    console.log(respBody);\r",
+											"\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"Marie\",\r\n    \"lastName\": \"Curie\",\r\n    \"email\": \"marie67@gmail.com\",\r\n    \"phone\": \"+1 800 200 300\",\r\n    \"comments\": \"Old friend\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://contactbook.elenaallienn.repl.co/api/contacts",
+									"protocol": "https",
+									"host": [
+										"contactbook",
+										"elenaallienn",
+										"repl",
+										"co"
+									],
+									"path": [
+										"api",
+										"contacts"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PATCH",
+					"item": [
+						{
+							"name": "Update contact by id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check the update\",  () => {\r",
+											"\tpm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"Anarie\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://contactbook.elenaallienn.repl.co/api/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"contactbook",
+										"elenaallienn",
+										"repl",
+										"co"
+									],
+									"path": [
+										"api",
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "DELETE",
+			"item": [
+				{
+					"name": "Delete contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check if the task can be deleted\", function(){\r",
+									"const respBody = pm.response.json();\r",
+									"pm.expect(respBody.msg, \"MSG property\").to.be.equal(\"Contact deleted: \" + pm.environment.get(\"contactId\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Marie\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://contactbook.elenaallienn.repl.co/api/contacts/{{contactId}}",
+							"protocol": "https",
+							"host": [
+								"contactbook",
+								"elenaallienn",
+								"repl",
+								"co"
+							],
+							"path": [
+								"api",
+								"contacts",
+								"{{contactId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
